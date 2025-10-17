@@ -1,4 +1,5 @@
 import { Navigate, Route, Routes } from "react-router";
+import { Toaster } from "react-hot-toast";
 
 import HomePage from "./pages/HomePage.jsx";
 import SignUpPage from "./pages/SignUpPage.jsx";
@@ -7,8 +8,7 @@ import NotificationsPage from "./pages/NotificationsPage.jsx";
 import CallPage from "./pages/CallPage.jsx";
 import ChatPage from "./pages/ChatPage.jsx";
 import OnboardingPage from "./pages/OnboardingPage.jsx";
-
-import { Toaster } from "react-hot-toast";
+import FriendPage from "./pages/FriendPage.jsx";
 
 import PageLoader from "./components/PageLoader.jsx";
 import useAuthUser from "./hooks/useAuthUser.js";
@@ -27,6 +27,7 @@ const App = () => {
   return (
     <div className="h-screen" data-theme={theme}>
       <Routes>
+        {/* 🏠 Home */}
         <Route
           path="/"
           element={
@@ -39,18 +40,24 @@ const App = () => {
             )
           }
         />
+
+        {/* 🔐 Signup */}
         <Route
           path="/signup"
           element={
             !isAuthenticated ? <SignUpPage /> : <Navigate to={isOnboarded ? "/" : "/onboarding"} />
           }
         />
+
+        {/* 🔑 Login */}
         <Route
           path="/login"
           element={
             !isAuthenticated ? <LoginPage /> : <Navigate to={isOnboarded ? "/" : "/onboarding"} />
           }
         />
+
+        {/* 🔔 Notifications */}
         <Route
           path="/notifications"
           element={
@@ -63,6 +70,8 @@ const App = () => {
             )
           }
         />
+
+        {/* 📞 Call */}
         <Route
           path="/call/:id"
           element={
@@ -74,6 +83,7 @@ const App = () => {
           }
         />
 
+        {/* 💬 Chat */}
         <Route
           path="/chat/:id"
           element={
@@ -87,6 +97,7 @@ const App = () => {
           }
         />
 
+        {/* 🚀 Onboarding */}
         <Route
           path="/onboarding"
           element={
@@ -101,10 +112,25 @@ const App = () => {
             )
           }
         />
+
+        {/* 👥 Friends */}
+        <Route
+          path="/friends"
+          element={
+            isAuthenticated && isOnboarded ? (
+              <Layout showSidebar={true}>
+                <FriendPage />
+              </Layout>
+            ) : (
+              <Navigate to={!isAuthenticated ? "/login" : "/onboarding"} />
+            )
+          }
+        />
       </Routes>
 
       <Toaster />
     </div>
   );
 };
+
 export default App;
